@@ -2,7 +2,7 @@
 // (format in data/MATCH_FORMAT.md), and draws every view from it. "Your team" and the shot filters live in
 // the address, so a view can be shared or reloaded.
 
-import { savedCopies, savedCopyNote, serverFetch, serverVideoUrl } from './config.js?v=2';
+import { DEMO, savedCopies, savedCopyNote, serverFetch, serverVideoUrl } from './config.js?v=3';
 import { analyse } from './insights.js?v=2';
 import { advancedStats, insightLists, methodNote, ppiCard, radarSvg, radarValues, teamAverageValues } from './insights-ui.js?v=2';
 
@@ -37,6 +37,7 @@ function readUrl() {
 }
 function writeUrl() {
   const p = new URLSearchParams();
+  if (DEMO) p.set('demo', '1');
   if (state.match) p.set('match', state.match);
   p.set('team', code(state.team));
   if (state.shotTeam !== 'mine') p.set('shots', state.shotTeam);
@@ -1052,17 +1053,34 @@ function showEmpty(serverOffline) {
   document.title = 'Your dashboard: ClutchMetrics';
 }
 
+// Public demo: banner, no match picker, no upload section or link
+function showDemo() {
+  $('.match-bar')?.remove();
+  $('[data-analyze]')?.remove();
+  document.querySelectorAll('a[href="#analyze"]').forEach((a) => a.setAttribute('hidden', ''));
+  const note = document.createElement('p');
+  note.className = 'note note--demo';
+  note.innerHTML = '<span><b>Live demo:</b> the AI&#8217;s analysis of Australia vs India (FIBA U16 Asian Championship 2023). '
+    + 'Every number below was produced automatically from the game video.</span> '
+    + '<a class="mini-btn" href="signup.html">Analyse your own game</a>';
+  $('[data-load-error]').after(note);
+  const label = $('.side__user .side__label');
+  if (label) label.textContent = 'Public demo';
+  document.querySelectorAll('[data-signout]').forEach((b) => { b.title = 'Exit demo'; b.setAttribute('aria-label', 'Exit demo'); });
+}
+
 async function start() {
   if (!document.querySelector('[data-dashboard]')) return;
   const url = readUrl();
-  state.match = url.match && /^[a-f0-9]{12}$/.test(url.match) ? url.match : null;
-  let mine = await myAnalyses();
+  state.match = url.match && /^[a-f0-9]{12}$/.test(url.match) && !DEMO ? url.match : null;
+  if (DEMO) showDemo();
+  let mine = DEMO ? [] : await myAnalyses();
   // server off: use the saved copies of this account's finished analyses, if any
   if (mine === null) { const saved = await savedCopies(); if (saved && saved.length) { mine = saved; state.saved = saved; } }
   // open the user's latest analysis when none is chosen; with none at all, show the empty state
   if (!state.match && mine && mine.length) state.match = mine[0].id;
-  buildMatchPicker(mine);
-  if (!state.match) { showEmpty(mine === null); return; }
+  if (!DEMO) buildMatchPicker(mine);
+  if (!state.match && !DEMO) { showEmpty(mine === null); return; }
   try {
     const copy = state.saved && state.saved.find((g) => g.id === state.match);
     const res = copy ? await fetch(`results/${copy.token}/match.json`, { cache: 'no-cache' })

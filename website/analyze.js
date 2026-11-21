@@ -1,7 +1,7 @@
 // "Analyse a video": upload a game video to the ClutchMetrics analysis server, follow its progress, open results.
 // Used by the coach and the player dashboards: <section data-analyze="coach|player"> ... </section>
 
-import { SERVER, serverHeaders, serverFetch, serverVideoUrl } from './config.js';
+import { DEMO, SERVER, serverHeaders, serverFetch, serverVideoUrl } from './config.js?v=3';
 import { openCourtMapper } from './court-map.js?v=2';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -287,7 +287,7 @@ async function watch(id, button) {
 }
 
 async function start() {
-  if (!root) return;
+  if (!root || DEMO) return;
   template();
   const form = $('[data-upload]', root);
   const input = $('[data-file]', root);

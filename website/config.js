@@ -3,6 +3,10 @@
 // and remove it again with:  localStorage.removeItem('cm-server')
 import { firebaseReady } from './firebase-config.js';
 
+// Public demo (coach-dashboard.html?demo=1): no login, shows only the built-in sample game (data/match.json) and never
+// talks to the analysis server, so visitors cannot upload (GPU cost) or delete anything.
+export const DEMO = new URLSearchParams(location.search).get('demo') === '1' && Boolean(document.querySelector('[data-dashboard="coach"]'));
+
 const DEFAULT_SERVER = 'https://fb843a5709291.notebooksn.jarvislabs.net';
 
 export const SERVER = (() => {

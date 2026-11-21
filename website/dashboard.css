@@ -682,3 +682,7 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   .radar__series, .heat__cells, .net__player { animation: none; }
 }
+
+/* public demo banner (coach-dashboard.html?demo=1) */
+.note--demo { align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; border-style: solid; border-color: rgb(255 122 26 / .55); color: var(--ink); font-size: 15px; }
+.note--demo b { color: var(--accent); }

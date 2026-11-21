@@ -211,7 +211,9 @@ if (gate) {
     gate.hidden = false;
     gate.querySelectorAll('[data-signout]').forEach((b) => b.addEventListener('click', async () => { await signOut(); location.href = 'index.html'; }));
   };
-  if (fb) {
+  if (role === 'coach' && new URLSearchParams(location.search).get('demo') === '1') {
+    open('Demo visitor', async () => {});              // public sample game only; nothing personal, no server access
+  } else if (fb) {
     const user = await fb.currentUser();
     const accountRole = user ? await fb.roleOf(user).catch(() => null) : null;
     if (!user || !accountRole) location.replace(loginFor(role));

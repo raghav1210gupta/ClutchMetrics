@@ -5,7 +5,7 @@ everyone onto a real court in metres and detects passes, interceptions and shots
 a coach dashboard, a personal report for every player and a broadcast-style analysis video. No sensors, no wearables:
 just the video.
 
-**Live demo:** https://praveenregar30.github.io/ClutchMetrics-2/ · **Models:** see [Model weights](#model-weights)
+**Live demo (no login):** https://praveenregar30.github.io/ClutchMetrics-2/coach-dashboard.html?demo=1 · **Models:** see [Model weights](#model-weights)
 
 ![Analysis video: jersey numbers, teams, ball trail, live team stats and court mini-map](docs/images/analysis_frame.jpg)
 
