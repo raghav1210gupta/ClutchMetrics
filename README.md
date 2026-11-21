@@ -92,7 +92,7 @@ Full details: [model/README_model_details.md](model/README_model_details.md).
 ## Model weights
 
 The trained weights are larger than GitHub's file limit and are published on Hugging Face:
-**https://huggingface.co/HF_ACCOUNT/clutchmetrics-models**
+**https://huggingface.co/raghav1210gupta/clutchmetrics-models**
 
 | File | Put it in | What it is |
 |---|---|---|
