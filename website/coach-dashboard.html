@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coach dashboard: ClutchMetrics</title>
+<meta name="description" content="The ClutchMetrics coach dashboard: the analysed match video, shot chart, players, movement, ball control and passing.">
+<meta name="theme-color" content="#100e0c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Anton&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css?v=2">
+<link rel="stylesheet" href="dashboard.css?v=11">
+<link rel="stylesheet" href="premium.css?v=6">
+<link rel="stylesheet" href="analyze.css?v=1">
+<link rel="stylesheet" href="court-map.css?v=1">
+<link rel="stylesheet" href="cursor.css">
+<link rel="stylesheet" href="stat-motion.css?v=1">
+<link rel="stylesheet" href="courtside.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the dashboard</a>
+<noscript><p style="padding:24px">The dashboard needs JavaScript. <a href="login-coach.html">Back to sign-in</a></p></noscript>
+
+<div class="app" data-dashboard="coach" hidden>
+  <aside class="side">
+    <div class="side__brand">
+      <a class="logo-link" href="index.html" aria-label="ClutchMetrics home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="8.500" r="7.500" fill="#ff7a1a"/><path d="M8.500 8.500h15M16 1v15M10.800 3.200q3 5.300 0 10.600M21.200 3.200q-3 5.300 0 10.600" fill="none" stroke="#160b03" stroke-width="1.100"/><path d="M4.500 18h23" fill="none" stroke="#ff7a1a" stroke-width="2.800" stroke-linecap="round"/><path d="M7 19.500 10.500 30h11L25 19.500M11.500 19.500 13.500 30M20.500 19.500 18.500 30M16 19.500V30M8.800 24.800h14.400" fill="none" stroke="#f7f1e8" stroke-width="1.200" stroke-linejoin="round"/></svg><span class="brand" translate="no">ClutchMetrics</span></a>
+      <button class="side__out side__out--top" type="button" data-signout>Sign out</button>
+    </div>
+    <a class="side__match" href="#overview" data-side-match hidden><span class="side__match-label">Now viewing</span><b data-side-title></b><span class="side__match-score" data-side-score hidden></span></a>
+    <button class="side__find" type="button" data-find-open aria-label="Search sections and players"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.500"/><path d="m16 16 4.500 4.500"/></svg><span>Search</span><kbd>Ctrl K</kbd></button>
+    <nav class="side__nav" aria-label="Dashboard sections">
+      <i class="side__pill" aria-hidden="true"></i>
+      <div class="side__group" role="group" aria-label="This game"><span class="side__glabel" aria-hidden="true">This game</span>
+        <a href="#overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6V4H4zM14 20h6v-9h-6zM4 20h6v-3H4zM14 7h6V4h-6z"/></svg>Overview</a>
+        <a href="#video"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.500"/><path d="m10 9 5 3-5 3z"/></svg>Match video</a>
+        <a href="#report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Match report</a>
+        
+      </div>
+      <div class="side__group" role="group" aria-label="Analysis"><span class="side__glabel" aria-hidden="true">Analysis</span>
+        <a href="#shots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.500"/><path d="M3.500 12h17M12 3.500v17M6.500 5.500c2.700 3.500 2.700 9.500 0 13M17.500 5.500c-2.700 3.500-2.700 9.500 0 13"/></svg>Shot chart</a>
+        <a href="#players"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7ZM2.500 20c.5-3.600 3-5.500 6.500-5.500s6 1.900 6.500 5.500M16 4.500a3.500 3.500 0 0 1 0 6.500M18.500 14.800c1.700.8 2.700 2.500 3 5.200"/></svg>Players</a>
+        <a href="#ratings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>Player ratings</a>
+        <a href="#movement"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18c3-1 4-6 7-6s3 4 6 4 4-7 5-9"/><circle cx="7" cy="6" r="2"/></svg>Movement</a>
+        <a href="#ball"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.500"/><circle cx="18" cy="7" r="2.500"/><circle cx="12" cy="18" r="2.500"/><path d="M8.500 7h7M7.300 9.200l3.500 6.500M16.700 9.200l-3.500 6.500"/></svg>Ball &amp; passing</a>
+        <a href="#plays"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>All plays</a>
+      </div>
+      <div class="side__group" role="group" aria-label="New game"><span class="side__glabel" aria-hidden="true">New game</span>
+        <a href="#analyze"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7.500 8.500 12 4l4.500 4.500"/><path d="M4 15v3.500A1.500 1.500 0 0 0 5.500 20h13a1.500 1.500 0 0 0 1.500-1.500V15"/></svg>Analyse a video</a>
+      </div>
+    </nav>
+    <div class="side__user">
+      <span class="side__avatar" data-avatar aria-hidden="true"></span>
+      <span class="side__who"><b data-email></b><span class="side__label">Coach account</span></span>
+      <button class="side__out side__out--icon" type="button" data-signout aria-label="Sign out" title="Sign out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h4.500A1.500 1.500 0 0 1 20 5.500v13a1.500 1.500 0 0 1-1.500 1.500H14"/><path d="M10 16.500 5.500 12 10 7.500M5.500 12H15"/></svg></button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+    <p class="note note--error" data-load-error hidden></p>
+
+    <div class="match-bar">
+      <div class="pick pick--inline">
+        <label for="match">Match</label>
+        <select id="match" data-match-select></select>
+      </div>
+      <a class="mini-btn" href="#analyze">+ Analyse a new video</a>
+    </div>
+
+    <section class="block card empty" data-empty hidden aria-labelledby="empty-h">
+      <h1 id="empty-h">Welcome to your dashboard</h1>
+      <p data-empty-text></p>
+      <div class="empty__actions"><a class="mini-btn mini-btn--primary" href="#analyze">Upload a game video</a></div>
+    </section>
+
+    <section class="block" id="overview" aria-labelledby="overview-h">
+      <div class="game-head">
+        <div>
+          <p class="eyebrow" data-meta></p>
+          <h1 id="overview-h" data-title>Loading match…</h1>
+          <p class="game-head__sub" data-clip></p>
+        </div>
+        <div class="game-head__right">
+          <div class="scorebox" data-scorebox></div>
+          <div class="pick">
+            <span class="pick__label" id="side-label">Your team</span>
+            <div class="seg" role="group" aria-labelledby="side-label" data-team-seg></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block card" id="video" aria-labelledby="video-h">
+      <div class="card__head">
+        <div>
+          <h2 id="video-h">Match video</h2>
+          <p class="card__sub">The model's analysis video. Select any mark on the timeline to jump to that moment.</p>
+        </div>
+      </div>
+      <div class="video-wrap">
+        <video class="video" data-video controls preload="metadata" playsinline aria-describedby="timeline-h"></video>
+      </div>
+      <h3 class="sub-h" id="timeline-h">Timeline</h3>
+      <div class="legend legend--row" data-timeline-legend></div>
+      <div class="timeline" data-timeline>
+        <div class="tip" data-timeline-tip role="tooltip" hidden></div>
+      </div>
+      <div class="moments" data-moments aria-label="Key moments"></div>
+    </section>
+
+    <section class="block" id="stats" aria-label="Team stats">
+      <div class="kpis" data-kpis aria-live="polite"></div>
+    </section>
+
+    <section class="block card" id="report" aria-labelledby="report-h">
+      <div class="card__head">
+        <div>
+          <h2 id="report-h">Match report</h2>
+          <p class="card__sub">Calculated from the events the model found in this clip. Select a player for the full report.</p>
+        </div>
+      </div>
+      <div class="leaders" data-leaders></div>
+      <div class="report-grid">
+        <section aria-labelledby="teams-h">
+          <h3 class="sub-h" id="teams-h">Team comparison</h3>
+          <div class="scroll"><table class="table table--teams" data-team-table></table></div>
+        </section>
+        <section aria-labelledby="obs-h">
+          <h3 class="sub-h" id="obs-h">Tactical observations</h3>
+          <ul class="obs" data-observations></ul>
+          <h3 class="sub-h" id="coach-h">Coaching recommendations for <span data-coach-team></span></h3>
+          <ul class="obs obs--coach" data-coaching aria-labelledby="coach-h"></ul>
+        </section>
+      </div>
+    </section>
+
+
+    <section class="block card" id="shots" aria-labelledby="shots-h">
+      <div class="card__head">
+        <div>
+          <h2 id="shots-h">Shot chart</h2>
+          <p class="card__sub" data-shot-summary aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="filters" role="group" aria-label="Filter the shots">
+        <div class="seg" role="group" aria-label="Team" data-seg="shotTeam"></div>
+        <div class="pick pick--inline">
+          <label for="player">Player</label>
+          <select id="player" name="player" data-player-select></select>
+        </div>
+        <div class="seg" role="group" aria-label="Result" data-seg="result"></div>
+      </div>
+      <div class="shots-grid">
+        <div class="court" data-court>
+          <svg class="court__svg" viewBox="0 0 1500 1050" role="img" aria-labelledby="court-desc" data-court-svg>
+            <desc id="court-desc" data-court-desc>FIBA half court with each shot marked.</desc>
+            <rect class="court__floor" width="1500" height="1050"/>
+            <path class="court__plank" d="M0 150H1500M0 300H1500M0 450H1500M0 600H1500M0 750H1500M0 900H1500"/>
+            <rect class="court__paint" x="505" width="490" height="580"/>
+            <g class="zones-layer" data-zone-layer aria-hidden="true"></g>
+            <path class="court__line" d="M505 0V580H995V0M570 580A180 180 0 0 0 930 580M570 580A180 180 0 0 1 930 580M90 0V299A675 675 0 0 0 1410 299V0M625 157.500A125 125 0 0 0 875 157.500M570 1050A180 180 0 0 1 930 1050M0 0H1500"/>
+            <path class="court__board" d="M660 120H840"/>
+            <circle class="court__rim" cx="750" cy="157.500" r="22.500"/>
+            <g data-shot-layer></g>
+          </svg>
+          <div class="tip" data-tip role="tooltip" hidden></div>
+          <div class="legend"><span><i class="dot dot--made"></i>Made</span><span><i class="cross"></i>Missed</span></div>
+        </div>
+        <div class="zones">
+          <h3>By zone</h3>
+          <table class="table table--zones">
+            <thead><tr><th scope="col">Zone</th><th scope="col" class="num">Made</th><th scope="col" class="num">Points</th></tr></thead>
+            <tbody data-zones></tbody>
+          </table>
+          <p class="fine" data-shots-unplaced></p>
+          <p class="fine">Lines follow FIBA rules: 3-point arc 6.75 m from the basket, corners 0.90 m from the sideline. A shot on the line counts 2.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block card" id="players" aria-labelledby="players-h">
+      <div class="card__head">
+        <div>
+          <h2 id="players-h" data-players-title>Players</h2>
+          <p class="card__sub">Select a player for their spotlight: shots, movement, passing and every moment. Select a column to sort.</p>
+        </div>
+      </div>
+      <div class="scroll">
+        <table class="table table--players">
+          <thead data-players-head></thead>
+          <tbody data-players></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block card" id="ratings" aria-labelledby="ratings-h">
+      <div class="card__head">
+        <div>
+          <h2 id="ratings-h">Player ratings</h2>
+          <p class="card__sub">Player Performance Index (0–100) and its four areas, ranked against everyone in this game. Select a player for strengths, weaknesses and advice.</p>
+        </div>
+        <div class="seg" role="group" aria-label="Which players" data-seg="rateTeam"></div>
+      </div>
+      <div class="scroll">
+        <table class="table table--ratings">
+          <thead><tr><th scope="col">Player</th><th scope="col">PPI</th><th scope="col" class="num">Offense</th><th scope="col" class="num">Defense</th><th scope="col" class="num">Physical</th><th scope="col" class="num">Playmaking</th><th scope="col">Top strength</th></tr></thead>
+          <tbody data-ratings></tbody>
+        </table>
+      </div>
+      <h3 class="sub-h">Compare two players</h3>
+      <div class="filters">
+        <div class="pick pick--inline"><label for="cmp-a">Player A</label><select id="cmp-a" data-cmp="a"></select></div>
+        <div class="pick pick--inline"><label for="cmp-b">Player B</label><select id="cmp-b" data-cmp="b"></select></div>
+      </div>
+      <div class="compare" data-compare></div>
+      <div data-method></div>
+    </section>
+
+    <div class="pair" id="movement">
+      <section class="block card" aria-labelledby="heat-h">
+        <div class="card__head">
+          <div>
+            <h2 id="heat-h">Where they played</h2>
+            <p class="card__sub" data-heat-sub>Time spent in each square metre of the court.</p>
+          </div>
+          <div class="pick pick--inline">
+            <label for="heat-player">Show</label>
+            <select id="heat-player" data-heat-select></select>
+          </div>
+        </div>
+        <div class="heat" data-heat>
+          <div class="tip" data-heat-tip role="tooltip" hidden></div>
+        </div>
+        <div class="legend legend--row heat-key" data-heat-key></div>
+      </section>
+
+      <section class="block card" aria-labelledby="run-h">
+        <div class="card__head">
+          <div>
+            <h2 id="run-h">Distance and speed</h2>
+            <p class="card__sub">Metres covered while on screen, and top speed. From the court map, so camera movement does not count.</p>
+          </div>
+        </div>
+        <div class="runs" data-runs></div>
+      </section>
+    </div>
+
+    <div class="pair" id="ball">
+      <section class="block card" aria-labelledby="control-h">
+        <div class="card__head">
+          <div>
+            <h2 id="control-h">Ball control</h2>
+            <p class="card__sub">Share of the time each team had the ball. A team keeps control until the other team gets it.</p>
+          </div>
+        </div>
+        <div class="control" data-control></div>
+        <div class="tally" data-tally></div>
+      </section>
+
+      <section class="block card" aria-labelledby="net-h">
+        <div class="card__head">
+          <div>
+            <h2 id="net-h">Passing network</h2>
+            <p class="card__sub" data-net-sub>Who passed to whom. Thicker arrows mean more passes.</p>
+          </div>
+        </div>
+        <div class="net" data-net>
+          <div class="tip" data-net-tip role="tooltip" hidden></div>
+        </div>
+        <table class="table table--pairs">
+          <thead><tr><th scope="col">Pass</th><th scope="col" class="num">Times</th></tr></thead>
+          <tbody data-pairs></tbody>
+        </table>
+      </section>
+    </div>
+
+    <section class="block card" id="plays" aria-labelledby="plays-h">
+      <div class="card__head">
+        <div>
+          <h2 id="plays-h">All plays</h2>
+          <p class="card__sub" data-feed-sub>Every pass, interception and shot the model found. Select a time to watch it, or a player for their spotlight.</p>
+        </div>
+      </div>
+      <div class="filters" role="group" aria-label="Filter the plays">
+        <div class="seg" role="group" aria-label="Kind of play" data-seg="playKind"></div>
+        <div class="seg" role="group" aria-label="Team" data-seg="playTeam"></div>
+        <div class="pick pick--inline feed__find">
+          <label for="feed-find">Player</label>
+          <input id="feed-find" type="search" inputmode="numeric" autocomplete="off" placeholder="Number, e.g. 7" data-feed-find>
+        </div>
+      </div>
+      <ol class="feed" data-plays aria-live="polite"></ol>
+      <button class="mini-btn feed__more" type="button" data-feed-more hidden></button>
+      <div class="about" data-about></div>
+    </section>
+
+    <section class="block card" id="analyze" aria-labelledby="analyze-h" data-analyze="coach"></section>
+  </main>
+</div>
+
+<dialog class="spot" data-spot-dialog aria-labelledby="spot-h">
+  <div class="spot__body" data-spot-body></div>
+</dialog>
+
+<script type="module" src="auth.js?v=2"></script>
+<script type="module" src="scroll-reveal.js?v=3"></script>
+<script type="module" src="premium.js?v=3"></script>
+<script type="module" src="dashboard.js?v=17"></script>
+<script type="module" src="analyze.js?v=10"></script>
+</body>
+</html>

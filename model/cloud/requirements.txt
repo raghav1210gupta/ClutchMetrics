@@ -1,0 +1,19 @@
+# Python packages for the ClutchMetrics analysis server on a Linux GPU machine (same versions as the laptop).
+# PyTorch is not listed: setup.sh keeps the machine's own CUDA PyTorch when it is new enough, else installs one.
+transformers==5.19.0
+rfdetr==1.12.0
+supervision==0.31.5
+ultralytics==8.4.148
+numpy
+scipy
+pillow
+imageio-ffmpeg==0.8.1
+safetensors
+huggingface_hub
+fastapi==0.162.2
+uvicorn==0.54.0
+python-multipart
+google-auth
+cryptography   # google-auth needs it to check website logins
+rsa
+requests

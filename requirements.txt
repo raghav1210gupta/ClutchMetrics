@@ -1,0 +1,22 @@
+# Python packages for ClutchMetrics (tested with Python 3.11).
+# Install PyTorch with CUDA first (https://pytorch.org/get-started/locally/), then: pip install -r requirements.txt
+transformers==5.19.0
+rfdetr==1.12.0
+supervision==0.31.5
+ultralytics==8.4.148
+numpy
+scipy
+pillow
+imageio-ffmpeg==0.8.1
+safetensors
+huggingface_hub
+fastapi==0.162.2
+uvicorn==0.54.0
+python-multipart
+google-auth
+cryptography   # google-auth needs it to check website logins
+rsa
+requests
+opencv-python-headless   # on a desktop, opencv-python also works
+matplotlib               # fonts for the analysis video
+peft                     # only for the experimental reader fine-tuning

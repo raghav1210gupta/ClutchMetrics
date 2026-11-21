@@ -1,0 +1,32 @@
+# Large or private files that must never be committed
+model/weights/
+model/datasets/
+model/runs/
+model/server_jobs/
+model/upload_parts/
+videos/
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.zip
+*.pt
+*.pth
+*.safetensors
+
+# Secrets (cloud keys and tokens live only on the machine that uses them)
+jl_api_key
+ngrok.yml
+.env
+*.key
+
+# Python / editor
+__pycache__/
+*.pyc
+env/
+venv/
+.venv/
+.ipynb_checkpoints/
+.vscode/
+.idea/
